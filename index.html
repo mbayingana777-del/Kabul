@@ -4,34 +4,65 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Professional Websites — Calls, Orders, Trust</title>
-  <meta name="description" content="Professional websites built to drive calls, orders, and trust. Clean, fast, mobile-first websites designed for local businesses that take growth seriously." />
+  <meta name="description" content="Professional websites built to drive calls, orders, and trust." />
 
   <style>
     :root{
-      --bg:#050708;
-      --panel:#0b1110;
-      --panel2:#07100d;
+      --bg:#040607;
+      --panel:rgba(7,16,13,.72);
       --text:#e9fff3;
       --muted:#a6d8bf;
       --green:#00ff88;
       --green2:#00d973;
       --line:rgba(0,255,136,.18);
-      --shadow:0 18px 60px rgba(0,0,0,.55);
       --radius:18px;
-      --radius2:24px;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background:
-        radial-gradient(1000px 700px at 10% -10%, rgba(0,255,136,.12), transparent 55%),
-        radial-gradient(800px 600px at 100% 20%, rgba(0,255,136,.08), transparent 45%),
-        linear-gradient(180deg, #040607, #030505 55%, #020404);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       color:var(--text);
+      background: var(--bg);
       overflow-x:hidden;
+    }
+
+    /* ---------- FULLSCREEN DRIFTING BACKGROUND SLIDES ---------- */
+    .bg{
+      position:fixed;
+      inset:0;
+      z-index:-3;
+      background: #000;
+      overflow:hidden;
+    }
+
+    .bg-slide{
+      position:absolute;
+      inset:-6%;
+      background-size:cover;
+      background-position:center;
+      opacity:0;
+      transform: scale(1.06) translate3d(0,0,0);
+      transition: opacity 1400ms ease;
+      will-change: opacity, transform, background-position;
+      filter: saturate(1.08) contrast(1.08);
+    }
+
+    .bg-slide.is-active{ opacity:1; }
+
+    /* Deepen mood + Matrix tint */
+    .bg:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:2;
+      background:
+        radial-gradient(900px 620px at 10% 10%, rgba(0,255,136,.12), transparent 58%),
+        radial-gradient(900px 620px at 90% 30%, rgba(0,255,136,.08), transparent 58%),
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.62) 55%, rgba(0,0,0,.72));
+      pointer-events:none;
     }
 
     /* Subtle grid */
@@ -39,6 +70,7 @@
       position:fixed;
       inset:0;
       pointer-events:none;
+      z-index:-2;
       opacity:.22;
       background-image:
         linear-gradient(to right, rgba(0,255,136,.05) 1px, transparent 1px),
@@ -47,31 +79,30 @@
       mask-image: radial-gradient(circle at 30% 10%, black 0%, transparent 62%);
     }
 
-    /* Matrix rain (lightweight) */
-    canvas#rain{
+    /* Film grain for “expensive” feel */
+    .grain{
       position:fixed;
       inset:0;
-      z-index:0;
-      opacity:.18;
       pointer-events:none;
-      filter: blur(.2px);
-      mix-blend-mode: screen;
+      z-index:-1;
+      opacity:.10;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
     }
 
+    /* ---------- PAGE LAYOUT ---------- */
     .wrap{
-      position:relative;
-      z-index:2;
       max-width:1100px;
       margin:0 auto;
-      padding:24px 18px 70px;
+      padding:24px 18px 80px;
     }
 
     header{
       display:flex;
-      align-items:center;
       justify-content:space-between;
-      gap:14px;
-      padding:12px 2px 28px;
+      align-items:center;
+      gap:12px;
+      padding:10px 2px 24px;
     }
 
     .brand{
@@ -93,13 +124,6 @@
       box-shadow: 0 10px 30px rgba(0,255,136,.08);
     }
 
-    .brand b{letter-spacing:.2px}
-    .brand span{color:var(--muted); font-size:.92rem}
-
-    .top-actions{
-      display:flex; gap:10px; align-items:center;
-    }
-
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding:10px 12px;
@@ -108,41 +132,23 @@
       background: rgba(7,16,13,.55);
       color:var(--text);
       text-decoration:none;
-      font-weight:600;
+      font-weight:800;
       font-size:.95rem;
-      box-shadow: 0 10px 35px rgba(0,0,0,.25);
       backdrop-filter: blur(6px);
     }
 
     .pill:hover{border-color: rgba(0,255,136,.42)}
     .pill:active{transform: translateY(1px)}
 
-    /* Hero */
     .hero{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:18px;
-      align-items:stretch;
-      padding:28px;
-      border-radius: var(--radius2);
+      border-radius:24px;
       border:1px solid rgba(0,255,136,.18);
-      background:
-        linear-gradient(180deg, rgba(11,17,16,.86), rgba(7,16,13,.72));
+      background: linear-gradient(180deg, rgba(7,16,13,.78), rgba(4,9,7,.68));
       box-shadow: var(--shadow);
-      position:relative;
+      padding:28px;
       overflow:hidden;
+      position:relative;
     }
-
-    .hero:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(700px 240px at 15% 0%, rgba(0,255,136,.14), transparent 60%),
-        radial-gradient(520px 220px at 110% 30%, rgba(0,255,136,.10), transparent 55%);
-      pointer-events:none;
-    }
-
-    .hero > *{position:relative; z-index:1}
 
     .kicker{
       display:inline-flex;
@@ -153,10 +159,11 @@
       border:1px solid rgba(0,255,136,.20);
       background: rgba(0,255,136,.06);
       color:var(--muted);
-      font-weight:700;
+      font-weight:900;
       font-size:.88rem;
       width:fit-content;
     }
+
     .dot{
       width:8px;height:8px;border-radius:50%;
       background: var(--green);
@@ -175,14 +182,13 @@
       color:var(--muted);
       font-size:1.05rem;
       line-height:1.55;
-      max-width: 54ch;
+      max-width: 58ch;
     }
 
     .micro{
-      color: rgba(233,255,243,.85);
-      font-weight:700;
+      color: rgba(233,255,243,.88);
+      font-weight:800;
       font-size:.95rem;
-      opacity:.92;
       margin:0 0 22px;
     }
 
@@ -203,18 +209,23 @@
       border:1px solid rgba(0,255,136,.25);
       background: linear-gradient(180deg, rgba(0,255,136,.14), rgba(0,0,0,.18));
       color:var(--text);
-      font-weight:800;
+      font-weight:900;
       text-decoration:none;
       box-shadow: 0 16px 40px rgba(0,0,0,.35);
     }
     .btn:hover{border-color: rgba(0,255,136,.45)}
     .btn:active{transform: translateY(1px)}
-
     .btn.secondary{
       background: rgba(7,16,13,.55);
       border-color: rgba(0,255,136,.18);
       color: var(--muted);
-      font-weight:800;
+    }
+
+    .section{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
     }
 
     .card{
@@ -225,92 +236,16 @@
       padding:18px;
     }
 
-    .stats{
-      display:grid;
-      gap:12px;
-    }
-
-    .stat{
-      padding:12px 12px;
-      border-radius: 16px;
-      border:1px solid rgba(0,255,136,.14);
-      background: rgba(0,255,136,.04);
-    }
-    .stat b{display:block; font-size:.98rem; margin-bottom:4px}
-    .stat span{color:var(--muted); font-size:.95rem; line-height:1.35}
-
-    /* Sections */
-    .section{
-      margin-top:18px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:18px;
-    }
-
-    .section h2{
+    .card h2{
       margin:0 0 10px;
       font-size:1.35rem;
       letter-spacing:-.3px;
     }
 
-    .list{
-      margin:0;
-      padding:0;
-      list-style:none;
-      display:grid;
-      gap:10px;
-    }
+    .hint{color:var(--muted); margin:0 0 14px; line-height:1.5}
 
-    .li{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      padding:10px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(0,255,136,.14);
-      background: rgba(7,16,13,.45);
-    }
-
-    .check{
-      width:18px;height:18px;
-      border-radius: 6px;
-      border:1px solid rgba(0,255,136,.35);
-      background: rgba(0,255,136,.10);
-      box-shadow: 0 0 18px rgba(0,255,136,.12);
-      flex:0 0 auto;
-      margin-top:2px;
-      position:relative;
-    }
-    .check:after{
-      content:"";
-      position:absolute;
-      left:5px; top:3px;
-      width:6px;height:10px;
-      border-right:2px solid var(--green);
-      border-bottom:2px solid var(--green);
-      transform: rotate(40deg);
-      opacity:.9;
-    }
-
-    .li b{display:block; margin-bottom:2px}
-    .li span{color:var(--muted); font-size:.95rem; line-height:1.35}
-
-    /* Contact / Scheduler */
-    #contact .hint{color:var(--muted); margin:0 0 14px; line-height:1.5}
-
-    form{
-      display:grid;
-      gap:12px;
-      margin-top:10px;
-    }
-
-    label{
-      display:grid;
-      gap:7px;
-      font-weight:800;
-      font-size:.95rem;
-      color: rgba(233,255,243,.92);
-    }
+    form{display:grid; gap:12px; margin-top:10px;}
+    label{display:grid; gap:7px; font-weight:900; font-size:.95rem; color: rgba(233,255,243,.92);}
 
     input, select{
       width:100%;
@@ -322,13 +257,10 @@
       outline:none;
       box-shadow: inset 0 0 0 1px rgba(0,0,0,.35);
     }
-
     input::placeholder{color: rgba(166,216,191,.65)}
     input:focus, select:focus{
       border-color: rgba(0,255,136,.45);
-      box-shadow:
-        0 0 0 4px rgba(0,255,136,.12),
-        inset 0 0 0 1px rgba(0,0,0,.35);
+      box-shadow: 0 0 0 4px rgba(0,255,136,.12), inset 0 0 0 1px rgba(0,0,0,.35);
     }
 
     .row{
@@ -337,31 +269,18 @@
       gap:12px;
     }
 
-    .submit{
-      margin-top:6px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-
     button{
       cursor:pointer;
       border:none;
       padding:12px 14px;
       border-radius: 14px;
-      font-weight:900;
+      font-weight:1000;
       color: #04110b;
       background: linear-gradient(180deg, var(--green), var(--green2));
       box-shadow: 0 18px 45px rgba(0,255,136,.18);
     }
-    button:hover{filter:saturate(1.1) brightness(1.02)}
-    button:active{transform: translateY(1px)}
-    .small{
-      color: rgba(166,216,191,.85);
-      font-size:.9rem;
-      line-height:1.35;
-    }
+
+    .small{color: rgba(166,216,191,.85); font-size:.9rem; line-height:1.35}
 
     .toast{
       display:none;
@@ -389,19 +308,22 @@
       letter-spacing:.1px;
     }
 
-    /* Responsive */
     @media (max-width: 900px){
-      .hero{grid-template-columns:1fr; padding:20px}
       .section{grid-template-columns:1fr}
       .row{grid-template-columns:1fr}
-      header{padding-bottom:14px}
+      .hero{padding:20px}
     }
   </style>
 </head>
 
 <body>
+  <!-- Background drift layer -->
+  <div class="bg" aria-hidden="true">
+    <div class="bg-slide" id="bgA"></div>
+    <div class="bg-slide" id="bgB"></div>
+  </div>
   <div class="grid" aria-hidden="true"></div>
-  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
 
   <div class="wrap">
     <header>
@@ -413,104 +335,48 @@
         </div>
       </a>
 
-      <div class="top-actions">
-        <a class="pill" href="#contact" aria-label="Jump to scheduling">
-          <span class="dot" aria-hidden="true"></span>
-          Schedule a call
-        </a>
-      </div>
+      <a class="pill" href="#contact">
+        <span class="dot" aria-hidden="true"></span>
+        Schedule a call
+      </a>
     </header>
 
     <main>
       <section class="hero" aria-label="Hero">
-        <div>
-          <div class="kicker"><span class="dot" aria-hidden="true"></span> Operator-grade websites for local businesses</div>
+        <div class="kicker"><span class="dot" aria-hidden="true"></span> Operator-grade websites for local businesses</div>
 
-          <h1>Professional websites built to drive calls, orders, and trust.</h1>
+        <h1>Professional websites built to drive calls, orders, and trust.</h1>
 
-          <p class="sub">
-            Clean, fast, mobile-first websites designed for local businesses that take growth seriously.
-          </p>
+        <p class="sub">
+          Clean, fast, mobile-first websites designed for local businesses that take growth seriously.
+        </p>
 
-          <p class="micro">Strategy first. Design second. Results always.</p>
+        <p class="micro">Strategy first. Design second. Results always.</p>
 
-          <div class="cta-row">
-            <a class="btn" href="#contact">Schedule a quick call →</a>
-            <a class="btn secondary" href="#process">How it works</a>
-          </div>
+        <div class="cta-row">
+          <a class="btn" href="#contact">Schedule a quick call →</a>
+          <a class="btn secondary" href="#about">How it works</a>
         </div>
-
-        <aside class="card" aria-label="Highlights">
-          <div class="stats">
-            <div class="stat">
-              <b>Mobile-first conversion</b>
-              <span>Clear actions: call, order, book—no friction.</span>
-            </div>
-            <div class="stat">
-              <b>Fast + secure by default</b>
-              <span>Lightweight builds that load quickly and feel premium.</span>
-            </div>
-            <div class="stat">
-              <b>Clarity over clutter</b>
-              <span>Designed to earn trust in under 5 seconds.</span>
-            </div>
-          </div>
-        </aside>
       </section>
 
-      <section class="section" id="process" aria-label="Process and Focus">
+      <section class="section" id="about" aria-label="About">
         <div class="card">
           <h2>What I focus on</h2>
-          <ul class="list">
-            <li class="li">
-              <span class="check" aria-hidden="true"></span>
-              <div>
-                <b>Calls & orders, front and center</b>
-                <span>One clear path for customers to take action.</span>
-              </div>
-            </li>
-            <li class="li">
-              <span class="check" aria-hidden="true"></span>
-              <div>
-                <b>Trust signals that matter</b>
-                <span>Photos, reviews, location, hours, and credibility—cleanly presented.</span>
-              </div>
-            </li>
-            <li class="li">
-              <span class="check" aria-hidden="true"></span>
-              <div>
-                <b>Speed and usability</b>
-                <span>Mobile performance, readable menus, and frictionless contact.</span>
-              </div>
-            </li>
-          </ul>
+          <p class="hint">A website should convert attention into action. That’s the standard.</p>
+          <div class="mono" style="line-height:1.6; color: rgba(233,255,243,.86)">
+            • Calls & orders front and center<br/>
+            • Trust signals that matter (photos, location, hours, reviews)<br/>
+            • Speed, clarity, mobile usability
+          </div>
         </div>
 
         <div class="card">
           <h2>How it works</h2>
-          <ul class="list">
-            <li class="li">
-              <span class="check" aria-hidden="true"></span>
-              <div>
-                <b>1) Quick call</b>
-                <span>We identify what’s currently losing you calls/orders.</span>
-              </div>
-            </li>
-            <li class="li">
-              <span class="check" aria-hidden="true"></span>
-              <div>
-                <b>2) Build + preview</b>
-                <span>I build the site and send a preview before anything goes live.</span>
-              </div>
-            </li>
-            <li class="li">
-              <span class="check" aria-hidden="true"></span>
-              <div>
-                <b>3) Launch</b>
-                <span>We publish, verify mobile performance, and finalize.</span>
-              </div>
-            </li>
-          </ul>
+          <div class="mono" style="line-height:1.6; color: rgba(233,255,243,.86)">
+            1) Quick call to identify friction<br/>
+            2) Build + preview before anything goes live<br/>
+            3) Launch + mobile verification
+          </div>
         </div>
       </section>
 
@@ -522,16 +388,6 @@
             <span class="mono">(10–15 minutes)</span>
           </p>
 
-          <!--
-            This form is "static" by default (it just shows a success toast).
-            If you want it to actually send somewhere, you have 3 easy options:
-
-            OPTION A (fastest): Use Formspree or similar and set action="https://formspree.io/f/XXXX" method="POST".
-            OPTION B: Netlify Forms (if you deploy on Netlify): add data-netlify="true" and a hidden input.
-            OPTION C: Your own backend endpoint (Render/Vercel): set action="/api/lead" method="POST".
-
-            I left it local so you can deploy anywhere without breaking.
-          -->
           <form id="leadForm" autocomplete="on">
             <label>
               Full Name
@@ -555,7 +411,7 @@
               </label>
             </div>
 
-            <div class="submit">
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:6px;">
               <button type="submit">Schedule a Call</button>
               <div class="small">No obligation. Just a straightforward conversation.</div>
             </div>
@@ -568,102 +424,114 @@
 
         <div class="card" aria-label="Direct Contact">
           <h2>Direct contact</h2>
-          <p class="hint">
-            Prefer to reach out directly? That’s fine.
-          </p>
+          <p class="hint">Prefer to reach out directly? That’s fine.</p>
 
-          <div class="stats">
-            <div class="stat">
-              <b>Phone</b>
-              <span class="mono"><a href="tel:+15551234567" style="color:var(--green); text-decoration:none;">(555) 123-4567</a></span>
-            </div>
-            <div class="stat">
-              <b>Email</b>
-              <span class="mono"><a href="mailto:hello@yourstudio.com" style="color:var(--green); text-decoration:none;">hello@yourstudio.com</a></span>
-            </div>
-            <div class="stat">
-              <b>Location</b>
-              <span>Serving local businesses (remote-friendly)</span>
-            </div>
+          <div class="mono" style="line-height:1.8; color: rgba(233,255,243,.86)">
+            Phone: <a href="tel:+15551234567" style="color:var(--green); text-decoration:none;">(555) 123-4567</a><br/>
+            Email: <a href="mailto:hello@yourstudio.com" style="color:var(--green); text-decoration:none;">hello@yourstudio.com</a>
           </div>
         </div>
       </section>
 
       <footer>
         <div>© <span id="year"></span> Your Studio</div>
-        <div class="mono">green/black • matrix-mode • performance-first</div>
+        <div class="mono">matrix-mode • smooth drift • performance-first</div>
       </footer>
     </main>
   </div>
 
   <script>
-    // Year
+    // --------- Update year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Lightweight form behavior (shows a confirmation toast).
-    // Swap this with a real POST endpoint when you're ready.
+    // --------- Form UX (local toast only)
     const form = document.getElementById("leadForm");
     const toast = document.getElementById("toast");
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-
-      // Basic validation (browser already validates required fields)
       const fd = new FormData(form);
       const payload = Object.fromEntries(fd.entries());
-
-      // You can replace this with a real fetch() call later:
-      // fetch("/api/lead", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(payload) })
-
       toast.style.display = "block";
-      toast.textContent = `✅ Got it, ${payload.name.split(" ")[0] || "thanks"} — I’ll reach out (${payload.time}).`;
+      const first = (payload.name || "Thanks").trim().split(" ")[0];
+      toast.textContent = `✅ Got it, ${first} — I’ll reach out (${payload.time}).`;
       form.reset();
-
-      // Hide after a bit
       setTimeout(() => { toast.style.display = "none"; }, 6500);
     });
 
-    // Matrix Rain (simple, performant)
-    const canvas = document.getElementById("rain");
-    const ctx = canvas.getContext("2d");
-    let w, h, cols, drops;
-    const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン#$%*";
+    // --------- DRIFTING BACKGROUND SLIDES
+    // Replace these with your Kabul photos (keep them optimized / resized)
+    const IMAGES = [
+      "images/kabul-1.jpg",
+      "images/kabul-2.jpg",
+      "images/kabul-3.jpg",
+      "images/kabul-4.jpg",
+      "images/kabul-5.jpg"
+    ];
 
-    function resize(){
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-      cols = Math.floor(w / 16);
-      drops = Array(cols).fill(0);
+    const bgA = document.getElementById("bgA");
+    const bgB = document.getElementById("bgB");
+
+    let active = bgA;
+    let next = bgB;
+    let idx = 0;
+
+    function setBg(el, url){
+      el.style.backgroundImage = `url("${url}")`;
+      // random start position for organic feel
+      const px = 35 + Math.random() * 30; // 35% - 65%
+      const py = 35 + Math.random() * 30;
+      el.dataset.px = px;
+      el.dataset.py = py;
+      el.style.backgroundPosition = `${px}% ${py}%`;
     }
-    window.addEventListener("resize", resize);
-    resize();
 
-    function draw(){
-      // Fade
-      ctx.fillStyle = "rgba(2,4,4,0.08)";
-      ctx.fillRect(0, 0, w, h);
+    // Preload images (reduces flash)
+    IMAGES.forEach(src => { const i = new Image(); i.src = src; });
 
-      ctx.font = "14px ui-monospace, Menlo, Consolas, monospace";
-      ctx.fillStyle = "rgba(0,255,136,0.85)";
+    // init
+    setBg(active, IMAGES[idx]);
+    active.classList.add("is-active");
 
-      for(let i=0;i<drops.length;i++){
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        const x = i * 16;
-        const y = drops[i] * 16;
+    const FADE_MS = 1400;          // should match CSS transition
+    const HOLD_MS = 5200;          // how long each photo stays
+    const DRIFT_STRENGTH = 10;     // px drift range
 
-        ctx.fillText(text, x, y);
+    function swap(){
+      idx = (idx + 1) % IMAGES.length;
 
-        // Reset drop randomly after it passes bottom
-        if(y > h && Math.random() > 0.975){
-          drops[i] = 0;
-        } else {
-          drops[i]++;
-        }
-      }
+      setBg(next, IMAGES[idx]);
+      next.classList.add("is-active");
+      active.classList.remove("is-active");
 
-      requestAnimationFrame(draw);
+      // swap refs
+      const temp = active;
+      active = next;
+      next = temp;
     }
-    draw();
+
+    // gentle drift (parallax) on the ACTIVE slide
+    let t0 = performance.now();
+    function animate(t){
+      const dt = (t - t0) / 1000;
+      // slow “floating” drift using sin/cos
+      const ox = Math.sin(dt * 0.18) * DRIFT_STRENGTH;
+      const oy = Math.cos(dt * 0.14) * DRIFT_STRENGTH;
+
+      const px = parseFloat(active.dataset.px || 50);
+      const py = parseFloat(active.dataset.py || 50);
+      active.style.transform = `scale(1.06) translate3d(${ox}px, ${oy}px, 0)`;
+      active.style.backgroundPosition = `${px}% ${py}%`;
+
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+
+    // run slideshow
+    setInterval(() => {
+      swap();
+    }, HOLD_MS + FADE_MS);
+
   </script>
 </body>
 </html>
